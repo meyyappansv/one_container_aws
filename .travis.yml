@@ -1,0 +1,21 @@
+sudo: required
+services: 
+  - docker
+before_install:
+  - docker build -t msevugan/docker-react -f Dockerfile.dev  .
+script:
+  - docker run msevugan/docker-react npm run test -- --coverage #default npm run test hangs after execution. coverage option exists back to command line 
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-us-east-2-549891734807"
+  bucket_path: "docker-react"
+  on: 
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
+   
+

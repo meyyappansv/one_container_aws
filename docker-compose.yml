@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web: 
+     build:
+        context: .
+        dockerfile: Dockerfile.dev
+     ports:
+        - "3000:3000"
+     volumes: 
+        - /app/node_modules
+        - .:/app
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes: 
+      #- /app/node_modules
+      #- .:/app
+      #Mapping volume like this will throw an error, as docker is looking for react_scripts under node_modules in the 
+      #local file system
+      - /app/node_modules
+      - .:/app
+      #create a bookmark to force the folder in container to be used instead.
+
+    
+    command: ["npm","run","test"]
